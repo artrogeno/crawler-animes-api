@@ -18,7 +18,8 @@ export class AnimesController extends BaseController {
   }
 
   async indexAnimesOnlineBr() {
-    const data = await getAnimesOnlineBR()
+    const { page } = this.req.query
+    const data = await getAnimesOnlineBR(page)
 
     let messages = this.messages.ANIMES_ONLINE_BR_GET_SUCCESS
     this.sendResponse({ data, messages })

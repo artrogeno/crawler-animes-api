@@ -54,24 +54,28 @@ const crawler = uri => {
   return promise
 }
 
-const removeLastString = str => {
-  return str.substring(0, str.length - 1)
-}
-
 export const listGateway = () => {
   return _listGateway
 }
 
-export const getAnimesOnlineBR = async () => {
+export const getAnimesOnlineBR = async (page = 1) => {
+  console.log('OPA: ', page)
   try {
     const animes = []
+    let pages = {
+      maxPage: 0,
+      page,
+      pageSize: 0,
+    }
     const { url: _uri, gateway } = findGateway(URL_ANIMES_ONLINE_BR)
-    const uri = removeLastString(_uri)
-    const html = await crawler(uri)
+    const html = await crawler(`${_uri}/page/${page}`)
     const $ = cheerio.load(html)
+
     const content = $('.telinhas')
       .children('ul')
       .find('li')
+
+    pages.pageSize = content.length
 
     content.each((i, elem) => {
       const context = $(elem)
@@ -113,7 +117,16 @@ export const getAnimesOnlineBR = async () => {
       })
     })
 
-    return animes
+    // PAGE
+    const listPages = $('#paginacao > ul li')
+    const lastElem = listPages.eq(-1).text()
+    pages.maxPage = parseInt(lastElem.replace('(', '').replace(')', ''))
+      ? listPages
+          .eq(-1)
+          .text()
+          .match(/\d+/g)[0]
+      : listPages.eq(-2).text()
+    return { pages, animes }
   } catch (error) {
     console.log('ERROR: ', error)
   }
