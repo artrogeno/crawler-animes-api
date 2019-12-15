@@ -281,3 +281,59 @@ export const findChaptersMangaHosted = async (mangaBase, chapterBase) => {
     console.log('ERROR: ', error)
   }
 }
+
+export const searchMangaOnMangaHosted = async search => {
+  try {
+    const { url: _uri, gateway } = findGateway(URL_MANGA_HOSTED)
+    const html = await crawler(`${_uri}find/${search}`)
+    const $ = cheerio.load(html)
+
+    const mangas = []
+    const title = $('title-widget > h1')
+      .text()
+      .trim()
+    const content = $('#page > .table-search tbody tr')
+    const setLargeImage = img => img.replace('_medium.', '_large.')
+
+    content.each((i, elem) => {
+      const mangaData = {}
+      const context = $(elem)
+      const box1 = context.children()[0]
+      const box2 = context.children()[1]
+
+      mangaData.image = setLargeImage(
+        $(box1)
+          .find('img.manga')
+          .attr('data-path')
+      )
+
+      mangaData.title = $(box2)
+        .find('.entry-title')
+        .first()
+        .text()
+        .trim()
+
+      const mangaUrl = $(box2)
+        .find('.entry-title > a')
+        .attr('href')
+
+      mangaData.manga = mangaUrl.split(`${URL_MANGA_HOSTED}manga/`)[1]
+
+      mangaData.subtitle = $(box2)
+        .find('span.muted')
+        .text()
+        .trim()
+
+      mangaData.summary = $(box2)
+        .find('.entry-content')
+        .text()
+        .trim()
+
+      mangas.push(mangaData)
+    })
+
+    return { title, gateway, mangas }
+  } catch (error) {
+    console.log('ERROR: ', error)
+  }
+}

@@ -23,6 +23,10 @@ export class MangasRouter extends BaseRouter {
       this.handler(MangasController.prototype.findMangaHosted)
     )
 
+    this.router.get(
+      '/manga-hosted/search/:search',
+      this.handler(MangasController.prototype.searchMangaHosted)
+    )
     // listMangaHosted
 
     // this.router.get(

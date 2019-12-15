@@ -4,6 +4,7 @@ import {
   getMangaHosted,
   listChaptersMangaHosted,
   findChaptersMangaHosted,
+  searchMangaOnMangaHosted,
 } from './mangas.model'
 
 export class MangasController extends BaseController {
@@ -36,6 +37,13 @@ export class MangasController extends BaseController {
     const { manga, chapter } = this.req.params
     const data = await findChaptersMangaHosted(manga, chapter)
     let messages = this.messages.MANGA_HOSTED_FIND_SUCCESS
+    this.sendResponse({ data, messages })
+  }
+
+  async searchMangaHosted() {
+    const { search } = this.req.params
+    const data = await searchMangaOnMangaHosted(search)
+    let messages = this.messages.MANGA_HOSTED_SEARCH_SUCCESS
     this.sendResponse({ data, messages })
   }
 
