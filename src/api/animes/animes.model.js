@@ -10,8 +10,14 @@ const _listGateway = [
     title: 'Animes Online BR',
     gateway: 'animes-online-br',
     url: URL_ANIMES_ONLINE_BR,
+    working: true,
   },
-  { title: 'Animes House', gateway: 'animes-house', url: URL_ANIMES_HOUSE },
+  {
+    title: 'Animes House',
+    gateway: 'animes-house',
+    url: URL_ANIMES_HOUSE,
+    working: false,
+  },
 ]
 
 const getVideoNoRedirect = (uri, baseUrl) => {

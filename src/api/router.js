@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { AnimesRouter } from './animes'
+import { MangasRouter } from './manga'
 
 export class ApiRouter {
   constructor() {
@@ -9,5 +10,6 @@ export class ApiRouter {
 
   providerRoutes() {
     this.router.use('/animes', new AnimesRouter().router)
+    this.router.use('/mangas', new MangasRouter().router)
   }
 }
