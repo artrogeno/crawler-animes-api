@@ -65,7 +65,6 @@ export const listGateway = () => {
 }
 
 export const getAnimesOnlineBR = async (page = 1) => {
-  console.log('OPA: ', page)
   try {
     const animes = []
     let pages = {
@@ -283,6 +282,36 @@ export const listEpisodesOnAnimesOnlineBR = async (id, category) => {
     return animes
   } catch (error) {
     console.log('ERROR: ', error)
+  }
+}
+
+export const searchOnAnimesOnlineBR = async search => {
+  try {
+    const { url: _uri, gateway } = findGateway(URL_ANIMES_ONLINE_BR)
+    const html = await crawler(`${_uri}search=${search}`)
+    const $ = cheerio.load(html)
+    const content = $('.contentBox')
+    let list = []
+    const title = content
+      .find('h1.single')
+      .text()
+      .split(':')[1]
+      .trim()
+
+    content.find('div.single ul li').each((i, elem) => {
+      const context = $(elem).find('a')
+      const title = context.text()
+      const [category, id] = context
+        .attr('href')
+        .split(`${URL_ANIMES_ONLINE_BR}`)[1]
+        .split('/')
+
+      list.push({ title, path: `${id}/${category}` })
+    })
+
+    return { title, gateway, list }
+  } catch (error) {
+    console.log(error)
   }
 }
 

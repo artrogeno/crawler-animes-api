@@ -19,6 +19,11 @@ export class AnimesRouter extends BaseRouter {
     )
 
     this.router.get(
+      '/animes-online-br/search/:search',
+      this.handler(AnimesController.prototype.searchAnimesOnlineBR)
+    )
+
+    this.router.get(
       '/animes-online-br/:id/:category',
       this.handler(AnimesController.prototype.listOnAnimesOnlineBR)
     )

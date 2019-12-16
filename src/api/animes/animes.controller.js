@@ -4,6 +4,7 @@ import {
   getAnimesOnlineBR,
   findEpOnAnimesOnlineBR,
   listEpisodesOnAnimesOnlineBR,
+  searchOnAnimesOnlineBR,
 } from './animes.model'
 
 export class AnimesController extends BaseController {
@@ -36,6 +37,13 @@ export class AnimesController extends BaseController {
     const { id, category } = this.req.params
     const data = await listEpisodesOnAnimesOnlineBR(id, category)
     let messages = this.messages.ANIMES_ONLINE_BR_LIST_SUCCESS
+    this.sendResponse({ data, messages })
+  }
+
+  async searchAnimesOnlineBR() {
+    const { search } = this.req.params
+    const data = await searchOnAnimesOnlineBR(search)
+    let messages = this.messages.ANIMES_ONLINE_BR_SEARCH_SUCCESS
     this.sendResponse({ data, messages })
   }
 }
