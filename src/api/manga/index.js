@@ -27,16 +27,5 @@ export class MangasRouter extends BaseRouter {
       '/manga-hosted/search/:search',
       this.handler(MangasController.prototype.searchMangaHosted)
     )
-    // listMangaHosted
-
-    // this.router.get(
-    //   '/animes-online-br/:id',
-    //   this.handler(MangasController.prototype.findAnimesOnlineBr)
-    // )
-
-    // this.router.get(
-    //   '/animes-online-br/:id/:category',
-    //   this.handler(MangasController.prototype.listOnAnimesOnlineBR)
-    // )
   }
 }
