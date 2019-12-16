@@ -288,10 +288,11 @@ export const searchMangaOnMangaHosted = async search => {
     const html = await crawler(`${_uri}find/${search}`)
     const $ = cheerio.load(html)
 
-    const mangas = []
-    const title = $('title-widget > h1')
+    const list = []
+    const title = $('.title-widget > h1')
       .text()
       .trim()
+      .split('"')[1]
     const content = $('#page > .table-search tbody tr')
     const setLargeImage = img => img.replace('_medium.', '_large.')
 
@@ -317,7 +318,7 @@ export const searchMangaOnMangaHosted = async search => {
         .find('.entry-title > a')
         .attr('href')
 
-      mangaData.manga = mangaUrl.split(`${URL_MANGA_HOSTED}manga/`)[1]
+      mangaData.path = mangaUrl.split(`${URL_MANGA_HOSTED}manga/`)[1]
 
       mangaData.subtitle = $(box2)
         .find('span.muted')
@@ -329,10 +330,10 @@ export const searchMangaOnMangaHosted = async search => {
         .text()
         .trim()
 
-      mangas.push(mangaData)
+      list.push(mangaData)
     })
 
-    return { title, gateway, mangas }
+    return { title, gateway, list }
   } catch (error) {
     console.log('ERROR: ', error)
   }
